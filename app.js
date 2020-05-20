@@ -18,7 +18,10 @@ app.use( bodyParser.json ( ))
 // importar rutas
 appRoutes = require('./routes/app');
 usuarioRoutes = require('./routes/usuario');
-loginRoutes = require('./routes/login')
+loginRoutes = require('./routes/login');
+lineaRoutes= require('./routes/linea');
+categoriaRoutes = require('./routes/categoria');
+productoRoutes= require('./routes/producto');
 
 
 // Conexion a la base de datos 
@@ -29,6 +32,9 @@ console.log('Base de datos: online mongodb://localhost:27017/catalogoBD');
 
 
 // rutas
+app.use('/producto', productoRoutes);
+app.use('/categoria', categoriaRoutes);
+app.use('/linea',lineaRoutes);
 app.use('/login', loginRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/', appRoutes);
