@@ -5,7 +5,39 @@ var app = express(); // levantar la app.
 
 
 var Categoria = require('../models/categorias');
+var Linea = require('../models/linea')
 
+
+//====================================================
+//                OBTENER  CATEGORIAS POR ID GET
+//===================================================
+
+app.get('/:id', (req, res, next) => {
+
+    var id = req.params.id;
+ 
+    Categoria.find({linea: id})
+    .exec((err,  categoria) => {
+        if(err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar la Categoria',
+                errors: err
+            });
+        }
+    
+        if(categoria ) {
+            res.status(200).json({
+                ok: true,
+                categoria: categoria,
+              
+                });
+        }
+    
+      
+    });
+    
+    });
 
 //========================================
 // Obtener categorias
@@ -36,6 +68,7 @@ app.get('/', (req, res, next ) => {
 app.put('/:id', (req, res) =>{
 
     var id = req.params.id;
+
     var body = req.body;
 
     Categoria.findById(id, (err, categoria) =>{ /// buscar en todos las categorias el id que recibo como parametro.
@@ -82,14 +115,14 @@ app.put('/:id', (req, res) =>{
 //========================================
 // Crear categoria 
 //========================================
-app.post( '/', (req, res) => {
+app.post( '/:id', (req, res) => {
 
     var body = req.body;
     var categoria = new Categoria({
         
     
         nombre: body.nombre,
-       // linea: req.linea._id,
+        linea: req.params.id,
         descripcion: body.descripcion,
        
         estado: body.estado
@@ -113,19 +146,23 @@ app.post( '/', (req, res) => {
     });
     });
 
+    
  //========================================
-// Eliminar linea  por Id
+// Cambiar estado categoria  por Id
 //========================================
-app.delete('/:id', (req, res) =>{
+app.put('/estado/:id', (req, res) =>{
 
     var id = req.params.id;
-    Categoria.findByIdAndRemove(id, (err, catgoriaEliminado)=>{
+    var estado = req.body.estado;
+   ///   findOneAndUpdate lo utlizamos para actulizar dato 
+
+   Categoria.findOneAndUpdate({_id : id}, { estado: estado }, (err, catgoriaEliminado)=>{
         if(err){
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al eliminar categoria',
                 errors: err
-           });
+        });
         }
         res.status(200).json({
             ok: true,

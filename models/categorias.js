@@ -5,7 +5,7 @@ var categoriaSchema =	new Schema({
                 descripcion: {	type: String,	required: [true,	'La descripcion es necesaria']	},
                
                 estado: {	type: Boolean,	required: false },
-              //  linea: {	type: Schema.Types.ObjectId,	ref: 'Linea' },
+                linea: {	type: Schema.Types.ObjectId,	ref: 'Linea' },
               
 			
                 

@@ -5,6 +5,39 @@ var app = express(); // levantar la app.
 var Producto = require('../models/producto');
 
 
+
+//====================================================
+//                OBTENER  CATEGORIAS POR ID GET
+//===================================================
+
+app.get('/:id', (req, res, next) => {
+
+    var id = req.params.id;
+ 
+    Producto.find({categoria: id})
+    .exec((err,  producto) => {
+        if(err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar el producto',
+                errors: err
+            });
+        }
+    
+        if(producto ) {
+            res.status(200).json({
+                ok: true,
+                producto: producto,
+              
+                });
+        }
+    
+      
+    });
+    
+    });
+
+
 //========================================
 // Obtener productos
 //========================================
@@ -81,16 +114,19 @@ app.put('/:id', (req, res) =>{
 //========================================
 // Crear producto 
 //========================================
-app.post( '/', (req, res) => {
+app.post( '/:id', (req, res) => {
 
     var body = req.body;
     var producto = new Producto({
-    
+        categoria: req.params.id,
         nombre: body.nombre,
         descripcion: body.descripcion,
-        valorUnitario: body.valorUnitario,
-        valorCaja: body.valorCaja,
-        estado: body.estado
+       credito: body.credito,
+        display: body.display,
+        unidad: body.unidad,
+        estado: body.estado,
+        refinv: body.refinv,
+        img: body.img
         
     });
     
@@ -109,6 +145,7 @@ app.post( '/', (req, res) => {
     });
     });
 
+  
  //========================================
 // Eliminar producto  por Id
 //========================================
@@ -131,5 +168,32 @@ app.delete('/:id', (req, res) =>{
     });
 
 });
+
+//========================================
+// Cambiar estado producto  por Id
+//========================================
+app.put('/estado/:id', (req, res) =>{
+
+    var id = req.params.id;
+    var estado = req.body.estado;
+   ///   findOneAndUpdate lo utlizamos para actulizar dato 
+
+   Producto.findOneAndUpdate({_id : id}, { estado: estado }, (err, productoEstado)=>{
+        if(err){
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al cambiar estado Producto',
+                errors: err
+        });
+        }
+        res.status(200).json({
+            ok: true,
+            producto: productoEstado
+        });
+
+    });
+
+});
+
 
 module.exports = app;

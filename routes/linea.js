@@ -107,24 +107,26 @@ app.post( '/', (req, res) => {
         });
     });
     });
-
- //========================================
-// Eliminar linea  por Id
 //========================================
-app.delete('/:id', (req, res) =>{
+// Cambiar estado Linea  por Id
+//========================================
+app.put('/estado/:id', (req, res) =>{
 
     var id = req.params.id;
-    Linea.findByIdAndRemove(id, (err, lineaEliminado)=>{
+    var estado = req.body.estado;
+   ///   findOneAndUpdate lo utlizamos para actulizar dato 
+
+   Linea.findOneAndUpdate({_id : id}, { estado: estado }, (err, lineaEstado)=>{
         if(err){
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al eliminar linea',
+                mensaje: 'Error al cambiar estado linea',
                 errors: err
-           });
+        });
         }
         res.status(200).json({
             ok: true,
-            linea: lineaEliminado
+            linea: lineaEstado
         });
 
     });
