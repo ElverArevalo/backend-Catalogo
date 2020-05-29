@@ -7,8 +7,10 @@ var Producto = require('../models/producto');
 const path = require('path');
 const fs = require('fs');
 
+
+
 //====================================================
-//                OBTENER  CATEGORIAS POR ID GET
+//                BUSCAR  CATEGORIAS POR ID GET
 //===================================================
 
 app.get('/:id', (req, res, next) => {

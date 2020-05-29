@@ -7,7 +7,40 @@ var app = express(); // levantar la app.
 
 var Linea = require('../models/linea');
 
+//======================================
+// Obtener linea por Id
+//======================================
+app.get(('/:id'), (req, res) =>{
+    var id = req.params.id;
+    Linea.findById(id)
+   
+    .exec((err, linea) => {
+        if(err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar el linea',
+                errors: err
+            });
+        }
+    
+        if(!linea) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'La linea con el Id ' + id + 'no existe',
+                errors: 'No existe la linea con el Id'
+            });
+        }
+    
+        res.status(200).json({
+            ok: true,
+            linea: linea,
+          
+            });
+    });
+    
+    });
 
+    
 
 //========================================
 // Obtener lineas
@@ -60,7 +93,7 @@ app.put('/:id', (req, res) =>{
         }
        linea.nombre = body.nombre;
        linea.descripcion = body.descripcion;
-       linea.img = body.img
+   
     
        linea.save((err, lineaActulizado) =>{
         if(err){

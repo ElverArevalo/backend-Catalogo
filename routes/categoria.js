@@ -7,6 +7,39 @@ var app = express(); // levantar la app.
 var Categoria = require('../models/categorias');
 var Linea = require('../models/linea')
 
+//====================================================
+//                OBTNER  CATEGORIAS POR ID GET
+//===================================================
+
+app.get(('/nombre/:id'), (req, res) =>{
+    var id = req.params.id;
+    Categoria.findById(id)
+   
+    .exec((err, categoria) => {
+        if(err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar el categoria',
+                errors: err
+            });
+        }
+    
+        if(!categoria) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'La categoria con el Id ' + id + 'no existe',
+                errors: 'No existe la categoria con el Id'
+            });
+        }
+    
+        res.status(200).json({
+            ok: true,
+            categoria: categoria,
+          
+            });
+    });
+    
+    });
 
 //====================================================
 //                OBTENER  CATEGORIAS POR ID GET
