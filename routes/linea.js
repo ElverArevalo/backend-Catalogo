@@ -1,5 +1,6 @@
 var express =  require('express'); // esto es para que funcione hay que exportar el exopress.
-var  bcrypt  =  require ( 'bcryptjs' ) ;  // encriptar la contraseña en una sola via
+var  bcrypt  =  require ( 'bcryptjs' ) ;  // encriptar la contraseña en una sola via.
+var fileUpload = require('express-fileupload');
 var app = express(); // levantar la app.
 
 
@@ -59,7 +60,6 @@ app.put('/:id', (req, res) =>{
         }
        linea.nombre = body.nombre;
        linea.descripcion = body.descripcion;
-       linea.estado = body.estado;
        linea.img = body.img
     
        linea.save((err, lineaActulizado) =>{
@@ -132,5 +132,6 @@ app.put('/estado/:id', (req, res) =>{
     });
 
 });
+
 
 module.exports = app;

@@ -30,6 +30,8 @@ loginRoutes = require('./routes/login');
 lineaRoutes= require('./routes/linea');
 categoriaRoutes = require('./routes/categoria');
 productoRoutes= require('./routes/producto');
+uploadRoutes= require('./routes/upload');
+imagenRoutes = require('./routes/imagenes')
 
 
 // Conexion a la base de datos 
@@ -40,6 +42,8 @@ console.log('Base de datos: online mongodb://localhost:27017/catalogoBD');
 
 
 // rutas
+app.use('/img', imagenRoutes);
+app.use('/upload', uploadRoutes);
 app.use('/producto', productoRoutes);
 app.use('/categoria', categoriaRoutes);
 app.use('/linea',lineaRoutes);

@@ -3,8 +3,9 @@ var express =  require('express'); // esto es para que funcione hay que exportar
 var app = express(); // levantar la app.
 
 var Producto = require('../models/producto');
-
-
+/// para subir la imagen
+const path = require('path');
+const fs = require('fs');
 
 //====================================================
 //                OBTENER  CATEGORIAS POR ID GET
@@ -89,9 +90,9 @@ app.put('/:id', (req, res) =>{
         }
        producto.nombre = body.nombre;
        producto.descripcion = body.descripcion;
-       producto.estado = body.estado;
-       producto.valorUnitario = body.valorUnitario;
-       producto.valorCaja = body.valorCaja
+       producto.credito = body.credito;
+       producto.display = body.display;
+       producto.unidad = body.unidad
        
      
     
@@ -194,6 +195,13 @@ app.put('/estado/:id', (req, res) =>{
     });
 
 });
+//========================================
+// Subir imagen de producto
+//=======================================
+
+
+
+
 
 
 module.exports = app;

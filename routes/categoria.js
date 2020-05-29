@@ -92,7 +92,7 @@ app.put('/:id', (req, res) =>{
         }
        categoria.nombre = body.nombre;
        categoria.descripcion = body.descripcion;
-       categoria.estado = body.estado;
+       
        
      
     
