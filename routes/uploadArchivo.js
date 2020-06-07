@@ -8,6 +8,7 @@ app.use(fileUpload());
 
 var Linea = require('../models/linea');
 var Categoria = require('../models/categorias');
+var Producto = require('../models/producto');
 
 
 app.post('/:tipo', async (req, res, next) => {
@@ -150,6 +151,43 @@ app.post('/:tipo', async (req, res, next) => {
 
       promesas.push(promise);
 
+
+
+      //////////////
+      const distintoProducto = Array.from(new Set(registrosArreglo.map(x => x[3])))
+      .map(nombre => {
+          return {
+              nombre: nombre,
+              descripcion: registrosArreglo.find(x => x[3] === nombre)[4],
+              refinv:registrosArreglo.find(x => x[3] === nombre)[0],
+              credito: registrosArreglo.find(x => x[3] === nombre)[5],
+              display: registrosArreglo.find(x => x[3] === nombre)[6],
+              unidad: registrosArreglo.find(x => x[3] === nombre)[7],
+              img:null,
+              estado: true,
+              strCategoria : registrosArreglo.find(x => x[3] === nombre)[2]
+          }
+      });
+
+      productoBuscar = [];
+
+      distintoProducto.forEach(x => {
+        productoBuscar.push(x.nombre);
+      });
+
+
+      promise = new Promise((resolve, reject) => {
+
+        Producto.find({nombre: {$in: productoBuscar}}, (err, resultado) => {
+            resolve(resultado);
+        });
+
+      });
+
+      promesas.push(promise);
+
+      ////////////////
+
       Promise.all(promesas).then(function(results) {
 
             let promesasLinea = [];
@@ -169,7 +207,7 @@ app.post('/:tipo', async (req, res, next) => {
                       promesasLinea.push(promiseLinea);
                 } else {
                     let promiseLinea = new Promise((resolve, reject) => {
-                        resolve(x);
+                        resolve(encontrado);
                       });
                    
                       promesasLinea.push(promiseLinea);
@@ -178,21 +216,69 @@ app.post('/:tipo', async (req, res, next) => {
 
             Promise.all(promesasLinea).then(function(resultsLinea) {
                 
+                let promesasCategoria = [];
                 distintoCategoria.forEach(async x => {
                     var encontrado = results[1].find(e => e.nombre == x.nombre);
     
                     if (!encontrado) {
 
-                        let cate = new Categoria({
-                            nombre: x.nombre,
-                            descripcion: x.nombre,
-                            estado: true,
-                            linea : resultsLinea.find(l => l.nombre === x.strLinea)._id
+                        let promiseCaytegoria = new Promise((resolve, reject) => {
+
+                            let cate = new Categoria({
+                                nombre: x.nombre,
+                                descripcion: x.nombre,
+                                estado: true,
+                                linea : resultsLinea.find(l => l.nombre === x.strLinea)._id
+                            });
+
+                            cate.save((err, lineaGuardado) => {
+                                resolve(lineaGuardado);
+                            });
                         });
 
-                        cate.save();
+                        promesasCategoria.push(promiseCaytegoria);
+                       
+                    } else {
+                        let promiseCaytegoria = new Promise((resolve, reject) => {
+                            resolve(encontrado);
+                        });
+                       
+                        promesasCategoria.push(promiseCaytegoria);
                     }
                 });
+
+                Promise.all(promesasCategoria).then(function(resultsCategoria) {
+                
+                    distintoProducto.forEach(async x => {
+                        var encontrado = results[2].find(e => e.nombre == x.nombre);
+        
+                        if (!encontrado) {
+    
+                            let prod = new Producto({
+                                nombre: x.nombre,
+                                descripcion: x.nombre,
+                                refinv: x.nombre,
+                                credito: x.credito,
+                                unidad: x.unidad,
+                                display: x.display,
+                                img:null,
+                                estado: true,
+                                categoria : resultsCategoria.find(c => c.nombre === x.strCategoria)._id
+                            });
+    
+                            prod.save();
+                        } else {
+                            encontrado.credito = x.credito;
+                            encontrado.unidad = x.unidad;
+                            encontrado.display = x.display;
+                            encontrado.descripcion = x.descripcion;
+                            encontrado.refinv = x.refinv;
+                            
+                            
+
+                            encontrado.save();
+                        }
+                    });
 
                 return res.status(200).json({
                     ok: true,
@@ -200,6 +286,7 @@ app.post('/:tipo', async (req, res, next) => {
                     producto: "ok"
                 });
             });
+           
             
             
         }).catch(function(err) {
@@ -208,7 +295,7 @@ app.post('/:tipo', async (req, res, next) => {
 
     });
 
-
+});
 
     
 
