@@ -9,7 +9,7 @@ var app = express(); //estoy definiendo mi servidor express
 //CORS
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token");
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
     next();
   });
@@ -35,6 +35,7 @@ imagenRoutes = require('./routes/imagenes');
 uploadArchivoRoutes = require('./routes/uploadArchivo');
 
 
+
 // Conexion a la base de datos 
 mongoose.connection.openUri('mongodb://localhost:27017/catalogoBD', (err, res) => {
 if (err) throw err; // si hay un error el throw no hace seguir mas alla
@@ -43,6 +44,7 @@ console.log('Base de datos: online mongodb://localhost:27017/catalogoBD');
 
 
 // rutas
+
 app.use('/archivo', uploadArchivoRoutes);
 app.use('/img', imagenRoutes);
 app.use('/upload', uploadRoutes);

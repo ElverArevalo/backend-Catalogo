@@ -1,11 +1,35 @@
 var express =  require('express'); // esto es para que funcione hay que exportar el exopress.
-
+var mdAutenticacion = require('../middlewares/autenticacion');
 var app = express(); // levantar la app.
 
 var Producto = require('../models/producto');
 /// para subir la imagen
 const path = require('path');
 const fs = require('fs');
+
+
+//====================================================
+//    BUSCADOR DE PRODUCTOS POR  CATEGORIAS  ID GET
+//===================================================
+
+app.get('/todo/:busqueda/:id', (req, res, next) => {
+    var busqueda = req.params.busqueda
+    var id= req.params.id
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+  
+    var regex = new RegExp(busqueda, 'i');
+
+    Producto.find({ nombre: regex, categoria:id }, (err, productos)=> {
+        res.status(200).json({
+            ok: true,
+            productos: productos,
+         
+           
+        });
+    });
+        
+    });
 
 
 
@@ -16,8 +40,12 @@ const fs = require('fs');
 app.get('/:id', (req, res, next) => {
 
     var id = req.params.id;
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
  
     Producto.find({categoria: id})
+    .skip(desde)
+     .limit(12)
     .exec((err,  producto) => {
         if(err) {
             return res.status(500).json({
@@ -28,11 +56,14 @@ app.get('/:id', (req, res, next) => {
         }
     
         if(producto ) {
-            res.status(200).json({
-                ok: true,
-                producto: producto,
-              
-                });
+            Producto.count({}, (err, conteo)=>{
+                res.status(200).json({
+                    ok: true,
+                    producto: producto,
+                    total: conteo
+    
+               });
+            });
         }
     
       
@@ -42,31 +73,9 @@ app.get('/:id', (req, res, next) => {
 
 
 //========================================
-// Obtener productos
-//========================================
-
-app.get('/', (req, res, next ) => {
-
-    Producto.find({}, (err, producto) => {
-
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                mensaje: 'Error cargando producto',
-                errors: err
-           });
-        }
-        res.status(200).json({
-            ok: true,
-            producto: producto
-       });
-
-    });
-});
-//========================================
 // Actulizar producto put
 //========================================
-app.put('/:id', (req, res) =>{
+app.put('/:id', mdAutenticacion.verificaToken , (req, res) =>{
 
     var id = req.params.id;
     var body = req.body;
@@ -117,7 +126,7 @@ app.put('/:id', (req, res) =>{
 //========================================
 // Crear producto 
 //========================================
-app.post( '/:id', (req, res) => {
+app.post( '/:id', mdAutenticacion.verificaToken , (req, res) => {
 
     var body = req.body;
     var producto = new Producto({
@@ -127,7 +136,7 @@ app.post( '/:id', (req, res) => {
        credito: body.credito,
         display: body.display,
         unidad: body.unidad,
-        estado: body.estado,
+        estado: true,
         refinv: body.refinv,
         img: body.img
         
@@ -152,7 +161,7 @@ app.post( '/:id', (req, res) => {
  //========================================
 // Eliminar producto  por Id
 //========================================
-app.delete('/:id', (req, res) =>{
+app.delete('/:id', mdAutenticacion.verificaToken , (req, res) =>{
 
     var id = req.params.id;
     Producto.findByIdAndRemove(id, (err, productoEliminado)=>{
@@ -175,7 +184,7 @@ app.delete('/:id', (req, res) =>{
 //========================================
 // Cambiar estado producto  por Id
 //========================================
-app.put('/estado/:id', (req, res) =>{
+app.put('/estado/:id', mdAutenticacion.verificaToken , (req, res) =>{
 
     var id = req.params.id;
     var estado = req.body.estado;

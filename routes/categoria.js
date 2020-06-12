@@ -2,15 +2,80 @@ var express =  require('express'); // esto es para que funcione hay que exportar
 
 var app = express(); // levantar la app.
 
-
+var mdAutenticacion = require('../middlewares/autenticacion');
 
 var Categoria = require('../models/categorias');
 var Linea = require('../models/linea')
 
+
+
 //====================================================
-//                OBTNER  CATEGORIAS POR ID GET
+//    BUSCADOR DE PRODUCTOS POR  CATEGORIAS  ID GET
 //===================================================
 
+app.get('/todo/:busqueda/:id', (req, res, next) => {
+    var busqueda = req.params.busqueda
+    var id= req.params.id
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+  
+    var regex = new RegExp(busqueda, 'i');
+
+    Categoria.find({ nombre: regex, linea:id }, (err, categorias)=> {
+        res.status(200).json({
+            ok: true,
+            categorias: categorias,
+         
+           
+        });
+    });
+        
+    });
+
+
+//====================================================
+//                OBTENER  CATEGORIAS POR ID DE LINEA  GET
+//===================================================
+
+app.get('/:id', (req, res, next) => {
+
+    var id = req.params.id;
+
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+ 
+     Categoria.find({linea: id})
+     .skip(desde)
+     .limit(12)
+     .exec((err,  categoria) => {
+        if(err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar la Categoria',
+                errors: err
+            });
+        }
+    
+        if(categoria ) {
+            
+            Categoria.count({}, (err, conteo)=>{
+                res.status(200).json({
+                    ok: true,
+                    categoria: categoria,
+                    total: conteo
+    
+               });
+            });
+        }
+    
+      
+    });
+    
+    });
+
+    //======================================
+// Obtener categoria por Id
+//======================================
 app.get(('/nombre/:id'), (req, res) =>{
     var id = req.params.id;
     Categoria.findById(id)
@@ -19,7 +84,7 @@ app.get(('/nombre/:id'), (req, res) =>{
         if(err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al buscar el categoria',
+                mensaje: 'Error al buscar la categroria',
                 errors: err
             });
         }
@@ -41,64 +106,12 @@ app.get(('/nombre/:id'), (req, res) =>{
     
     });
 
-//====================================================
-//                OBTENER  CATEGORIAS POR ID GET
-//===================================================
 
-app.get('/:id', (req, res, next) => {
 
-    var id = req.params.id;
- 
-    Categoria.find({linea: id})
-    .exec((err,  categoria) => {
-        if(err) {
-            return res.status(500).json({
-                ok: false,
-                mensaje: 'Error al buscar la Categoria',
-                errors: err
-            });
-        }
-    
-        if(categoria ) {
-            res.status(200).json({
-                ok: true,
-                categoria: categoria,
-              
-                });
-        }
-    
-      
-    });
-    
-    });
-
-//========================================
-// Obtener categorias
-//========================================
-
-app.get('/', (req, res, next ) => {
-
-    Categoria.find({}, (err, categoria) => {
-
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                mensaje: 'Error cargando Categorias',
-                errors: err
-           });
-        }
-        res.status(200).json({
-            ok: true,
-            categoria: categoria,
-            
-       });
-
-    });
-});
 //========================================
 // Actulizar categoria put
 //========================================
-app.put('/:id', (req, res) =>{
+app.put('/:id',mdAutenticacion.verificaToken , (req, res) =>{
 
     var id = req.params.id;
 
@@ -148,7 +161,7 @@ app.put('/:id', (req, res) =>{
 //========================================
 // Crear categoria 
 //========================================
-app.post( '/:id', (req, res) => {
+app.post( '/:id', mdAutenticacion.verificaToken , (req, res) => {
 
     var body = req.body;
     var categoria = new Categoria({
@@ -157,8 +170,7 @@ app.post( '/:id', (req, res) => {
         nombre: body.nombre,
         linea: req.params.id,
         descripcion: body.descripcion,
-       
-        estado: body.estado
+        estado:true
         
     });
     
@@ -183,7 +195,7 @@ app.post( '/:id', (req, res) => {
  //========================================
 // Cambiar estado categoria  por Id
 //========================================
-app.put('/estado/:id', (req, res) =>{
+app.put('/estado/:id', mdAutenticacion.verificaToken , (req, res) =>{
 
     var id = req.params.id;
     var estado = req.body.estado;

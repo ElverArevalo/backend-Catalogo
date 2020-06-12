@@ -1,11 +1,38 @@
 var express =  require('express'); // esto es para que funcione hay que exportar el exopress.
-var  bcrypt  =  require ( 'bcryptjs' ) ;  // encriptar la contraseña en una sola via.
-var fileUpload = require('express-fileupload');
+
 var app = express(); // levantar la app.
 
 
 
 var Linea = require('../models/linea');
+
+
+var mdAutenticacion = require('../middlewares/autenticacion');
+
+
+//====================================================
+//    BUSCADOR DE PRODUCTOS 
+//===================================================
+
+app.get('/todo/:busqueda/', (req, res, next) => {
+    var busqueda = req.params.busqueda
+   
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+  
+    var regex = new RegExp(busqueda, 'i');
+
+    Linea.find({ nombre: regex }, (err, lineas)=> {
+        res.status(200).json({
+            ok: true,
+            lineas: lineas,
+         
+           
+        });
+    });
+        
+    });
+
 
 //======================================
 // Obtener linea por Id
@@ -47,8 +74,14 @@ app.get(('/:id'), (req, res) =>{
 //========================================
 
 app.get('/', (req, res, next ) => {
-
-    Linea.find({}, (err, linea) => {
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+    Linea.find({}) 
+    .skip(desde)
+    .limit(12)
+    .exec(
+        
+        (err, linea) => {
 
         if (err) {
             return res.status(500).json({
@@ -57,17 +90,24 @@ app.get('/', (req, res, next ) => {
                 errors: err
            });
         }
-        res.status(200).json({
-            ok: true,
-            linea: linea
-       });
+        Linea.count({}, (err, conteo)=>{
+            
+            res.status(200).json({
+                ok: true,
+                linea: linea,
+                total: conteo
+
+           });
+        });
+
+        
 
     });
 });
 //========================================
 // Actulizar linea put
 //========================================
-app.put('/:id', (req, res) =>{
+app.put('/:id', mdAutenticacion.verificaToken , (req, res) =>{
 
     var id = req.params.id;
     var body = req.body;
@@ -114,7 +154,7 @@ app.put('/:id', (req, res) =>{
 //========================================
 // Crear linea 
 //========================================
-app.post( '/', (req, res) => {
+app.post( '/', mdAutenticacion.verificaToken , (req, res) => {
 
     var body = req.body;
     var linea = new Linea({
@@ -122,7 +162,7 @@ app.post( '/', (req, res) => {
         nombre: body.nombre,
         descripcion: body.descripcion,
         img: body.img  ,
-        estado: body.estado
+        estado: true,
         
     });
     
@@ -143,7 +183,7 @@ app.post( '/', (req, res) => {
 //========================================
 // Cambiar estado Linea  por Id
 //========================================
-app.put('/estado/:id', (req, res) =>{
+app.put('/estado/:id', mdAutenticacion.verificaToken , (req, res) =>{
 
     var id = req.params.id;
     var estado = req.body.estado;
