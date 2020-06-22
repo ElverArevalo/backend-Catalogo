@@ -4,14 +4,6 @@ var mongoose = require('mongoose'); // con esto tengo la refrencia de mongoose
 var  bodyParser  = require ('body-parser') ;
 
 
-var app = express();
-
-app.use(express.static(__dirname+'/dist/backend-serve'));
-app.get('/',function(req,res){
-    res.sendFile(path.join(__dirname+'/dist/backend-serve/app.js'));
-});
-
-
 // Inicalizar variables
 
 var app = express(); //estoy definiendo mi servidor express
