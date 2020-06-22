@@ -33,6 +33,10 @@ productoRoutes= require('./routes/producto');
 uploadRoutes= require('./routes/upload');
 imagenRoutes = require('./routes/imagenes');
 uploadArchivoRoutes = require('./routes/uploadArchivo');
+linePageRoutes = require('./routes/lineapage');
+categoriaPageRoutes = require('./routes/categoriapage');
+productoPageRoutes = require('./routes/productopage');
+productosRoutes = require('./routes/productos');
 
 
 
@@ -44,7 +48,10 @@ console.log('Base de datos: online mongodb://localhost:27017/catalogoBD');
 
 
 // rutas
-
+app.use('/productos',productosRoutes);
+app.use('/producto/page',productoPageRoutes);
+app.use('/categoria/page',categoriaPageRoutes);
+app.use('/linea/page',linePageRoutes);
 app.use('/archivo', uploadArchivoRoutes);
 app.use('/img', imagenRoutes);
 app.use('/upload', uploadRoutes);

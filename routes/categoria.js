@@ -5,7 +5,7 @@ var app = express(); // levantar la app.
 var mdAutenticacion = require('../middlewares/autenticacion');
 
 var Categoria = require('../models/categorias');
-var Linea = require('../models/linea')
+
 
 
 

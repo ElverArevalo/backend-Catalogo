@@ -70,13 +70,13 @@ app.get(('/:id'), (req, res) =>{
     
 
 //========================================
-// Obtener lineas
+// Obtener lineas admin
 //========================================
 
 app.get('/', (req, res, next ) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
-    Linea.find({}) 
+    Linea.find({})
     .skip(desde)
     .limit(12)
     .exec(
@@ -104,6 +104,8 @@ app.get('/', (req, res, next ) => {
 
     });
 });
+
+
 //========================================
 // Actulizar linea put
 //========================================

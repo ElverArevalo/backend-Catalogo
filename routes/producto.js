@@ -206,12 +206,6 @@ app.put('/estado/:id', mdAutenticacion.verificaToken , (req, res) =>{
     });
 
 });
-//========================================
-// Subir imagen de producto
-//=======================================
-
-
-
 
 
 
