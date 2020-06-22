@@ -12,6 +12,8 @@ var Usuario = require('../models/usuario');
 
 app.get('/', (req, res, next ) => {
 
+    console.log("Ingreso");
+
     Usuario.find({}, (err, usuario) => {
 
         if (err) {
