@@ -43,7 +43,7 @@ productosRoutes = require('./routes/productos');
 
 
 // Conexion a la base de datos 
-mongoose.connection.openUri('mongodb://ezequeil:Samuel1to11@ds143707.mlab.com:43707/heroku_fz3c0hh7', (err, res) => {
+mongoose.connection.openUri('mongodb://ezequiel:Samuel1to11@ds143707.mlab.com:43707/heroku_fz3c0hh7', (err, res) => {
 if (err) throw err; // si hay un error el throw no hace seguir mas alla
 console.log('Base de datos: online mongodb://localhost:27017/catalogoBD');
 })
@@ -65,6 +65,8 @@ app.use('/usuario', usuarioRoutes);
 app.use('/', appRoutes);
 
 
-// Escuchar el express - peticiones
+//escuchar peticiones
 
-app.listen(process.env.PORT || 3000);// escuchando en el puerto 
+app.listen(3000, ()=>{
+  console.log('Express serve puerto 3000: \x1b[32m%s\x1b[0m ',' online')
+  })
