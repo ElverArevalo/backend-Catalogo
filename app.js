@@ -4,6 +4,13 @@ var mongoose = require('mongoose'); // con esto tengo la refrencia de mongoose
 var  bodyParser  = require ('body-parser') ;
 
 
+
+var path = require('path');
+
+
+
+
+
 // Inicalizar variables
 
 var app = express(); //estoy definiendo mi servidor express
@@ -67,6 +74,9 @@ app.use('/', appRoutes);
 
 //escuchar peticiones
 
-app.listen(3000, ()=>{
-  console.log('Express serve puerto 3000: \x1b[32m%s\x1b[0m ',' online')
-  })
+app.use(express.static(__dirname+'/backend-serve'));
+app.get('/',function(req,res){
+    res.sendFile(path.join(__dirname+'/backend-serve/app.js'));
+});
+
+app.listen(process.env.PORT || 3000);
