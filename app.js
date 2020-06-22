@@ -50,7 +50,7 @@ productosRoutes = require('./routes/productos');
 
 
 // Conexion a la base de datos 
-mongoose.connection.openUri('mongodb://heroku_fz3c0hh7:Samuel1to11@ds143707.mlab.com:43707/heroku_fz3c0hh7', (err, res) => {
+mongoose.connection.openUri('mongodb://ezequiel:Samuel1to11@ds143707.mlab.com:43707/heroku_fz3c0hh7', (err, res) => {
 if (err) throw err; // si hay un error el throw no hace seguir mas alla
 
 })
