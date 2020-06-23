@@ -71,7 +71,7 @@ app.put('/:tipo/:id', (req, res, next) => {
 
     /// MOVER EL ARCHIVO DEL TEMPORAL A UN PATH 
 
-    var path = `https://onedrive.live.com/?id=root&cid=9A7889A20AD5ED4F/${ tipo }/${ nombreArchivo}`;
+    var path = `https://onedrive.live.com/?id=9A7889A20AD5ED4F%21762&cid=9A7889A20AD5ED4F/${ tipo }/${ nombreArchivo}`;
     archivo.mv( path, err =>{
        if(err){
         return res.status(500).json({
@@ -92,7 +92,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res){
 
         Linea.findById(id, (err, linea) => {
 
-            var  pathViejo = './uploads/lineas/'+ linea.img;
+            var  pathViejo = 'https://onedrive.live.com/?id=9A7889A20AD5ED4F%21762&cid=9A7889A20AD5ED4F/https://onedrive.live.com/?id=9A7889A20AD5ED4F%21759&cid=9A7889A20AD5ED4F/'+ linea.img;
             
            
 
