@@ -6,7 +6,7 @@ var productoSchema =	new Schema({
                 credito: {type: Number, required:false},
                 display: {type: Number, required:false},
                 unidad: {type: Number, required:false},
-                refinv: {type: String, required:[true, 'la referencia inventario es necesaria']},
+                refinv: {type: String, required:false},
                 estado: {	type: Boolean,	required: false },
                 img: {type: String, required:false},
               
