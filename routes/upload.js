@@ -10,6 +10,13 @@ var app = express();
 var Linea = require('../models/linea');
 var Producto = require('../models/producto');
 
+var cloudinary = require('cloudinary').v2
+cloudinary.config( {
+    cloud_name: 'earevalo',
+    api_key: '841621733329825',
+    api_secret: 'AP6sIG3fjavFEvSMDqAakYHwSv8'
+})
+
 // default options
 app.use(fileUpload());
 
@@ -71,7 +78,7 @@ app.put('/:tipo/:id', (req, res, next) => {
 
     /// MOVER EL ARCHIVO DEL TEMPORAL A UN PATH 
 
-    var path = `https://res.cloudinary.com/earevalo/image/upload/v1593091218/uploads/${ tipo }/${ nombreArchivo}`;
+    var path = `./uploads/${ tipo }/${ nombreArchivo}`;
     archivo.mv( path, err =>{
        if(err){
         return res.status(500).json({
@@ -87,12 +94,15 @@ app.put('/:tipo/:id', (req, res, next) => {
 });
 
 function subirPorTipo(tipo, id, nombreArchivo, res){
+   
 
     if(tipo === 'lineas'){
 
         Linea.findById(id, (err, linea) => {
 
-            var  pathViejo = 'https://res.cloudinary.com/earevalo/image/upload/v1593092322/uploads/lineas/'+ linea.img;
+            var  pathViejo = './uploads/lineas/'+ linea.img;
+           
+            console.log(cloudinary);
             
            
 
