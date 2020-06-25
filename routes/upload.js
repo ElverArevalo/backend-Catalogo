@@ -71,7 +71,7 @@ app.put('/:tipo/:id', (req, res, next) => {
 
     /// MOVER EL ARCHIVO DEL TEMPORAL A UN PATH 
 
-    var path = `https://cloudinary.com/console/c-e197a821701b6decb6957c3fa2d62a/media_library/folders/71c8428793b196d9e28062bed7771b81/${ tipo }/${ nombreArchivo}`;
+    var path = `https://res.cloudinary.com/earevalo/image/upload/v1593091218/uplodas/${ tipo }/${ nombreArchivo}`;
     archivo.mv( path, err =>{
        if(err){
         return res.status(500).json({
@@ -92,7 +92,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res){
 
         Linea.findById(id, (err, linea) => {
 
-            var  pathViejo = 'https://cloudinary.com/console/c-e197a821701b6decb6957c3fa2d62a/media_library/folders/home/uploads/https://cloudinary.com/console/c-e197a821701b6decb6957c3fa2d62a/media_library/folders/0c1ea311bd3770e91c872f86edd7c7de/lineas/'+ linea.img;
+            var  pathViejo = 'https://res.cloudinary.com/earevalo/image/upload/v1593091218/uplodas/lineas'+ linea.img;
             
            
 
