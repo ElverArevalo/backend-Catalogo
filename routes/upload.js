@@ -71,7 +71,7 @@ app.put('/:tipo/:id', (req, res, next) => {
 
     /// MOVER EL ARCHIVO DEL TEMPORAL A UN PATH 
 
-    var path = `./uploads/${ tipo }/${ nombreArchivo}`;
+    var path = `https://cloudinary.com/console/c-e197a821701b6decb6957c3fa2d62a/media_library/folders/home/uploads/${ tipo }/${ nombreArchivo}`;
     archivo.mv( path, err =>{
        if(err){
         return res.status(500).json({
@@ -92,7 +92,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res){
 
         Linea.findById(id, (err, linea) => {
 
-            var  pathViejo = './uploads/lineas/'+ linea.img;
+            var  pathViejo = 'https://cloudinary.com/console/c-e197a821701b6decb6957c3fa2d62a/media_library/folders/home/uploads/https://cloudinary.com/console/c-e197a821701b6decb6957c3fa2d62a/media_library/folders/0c1ea311bd3770e91c872f86edd7c7de/lineas/'+ linea.img;
             
            
 
