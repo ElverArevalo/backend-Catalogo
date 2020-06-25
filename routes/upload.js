@@ -92,7 +92,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res){
 
         Linea.findById(id, (err, linea) => {
 
-            var  pathViejo = 'https://res.cloudinary.com/earevalo/image/upload/v1593091218/uploads/lineas'+ linea.img;
+            var  pathViejo = 'https://res.cloudinary.com/earevalo/image/upload/v1593092322/uploads/lineas/'+ linea.img;
             
            
 
