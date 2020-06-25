@@ -71,7 +71,7 @@ app.put('/:tipo/:id', (req, res, next) => {
 
     /// MOVER EL ARCHIVO DEL TEMPORAL A UN PATH 
 
-    var path = `https://res.cloudinary.com/earevalo/image/upload/v1593091218/uplodas/${ tipo }/${ nombreArchivo}`;
+    var path = `https://res.cloudinary.com/earevalo/image/upload/v1593091218/uploads/${ tipo }/${ nombreArchivo}`;
     archivo.mv( path, err =>{
        if(err){
         return res.status(500).json({
@@ -92,7 +92,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res){
 
         Linea.findById(id, (err, linea) => {
 
-            var  pathViejo = 'https://res.cloudinary.com/earevalo/image/upload/v1593091218/uplodas/lineas'+ linea.img;
+            var  pathViejo = 'https://res.cloudinary.com/earevalo/image/upload/v1593091218/uploads/lineas'+ linea.img;
             
            
 
