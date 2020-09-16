@@ -23,11 +23,12 @@ app.use(fileUpload());
 
 
 
-app.put('/:tipo/:id', (req, res, next) => {
+app.put('/:tipo/:id', async (req, res, next) => {
 
     var tipo = req.params.tipo;
     var id = req.params.id;
 
+    await cloudinary.v2.uploader.upload(req.file.path)
     // TIPOS DE COLECCION 
 
     var tiposValidos = ['lineas', 'productos'] ;
@@ -100,9 +101,9 @@ function subirPorTipo(tipo, id, nombreArchivo, res){
 
         Linea.findById(id, async (err, linea) => {
 
-            await cloudinary.v2.uploads.lineas(req.files.path)
+            //await cloudinary.v2.fileUpload.up
                 
-           // var  pathViejo = './uploads/lineas/'+ linea.img;
+            var  pathViejo = './uploads/lineas/'+ linea.img;
             
            
 
