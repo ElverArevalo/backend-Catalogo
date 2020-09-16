@@ -23,12 +23,11 @@ app.use(fileUpload());
 
 
 
-app.put('/:tipo/:id', async (req, res, next) => {
+app.put('/:tipo/:id', (req, res, next) => {
 
     var tipo = req.params.tipo;
     var id = req.params.id;
 
-    await cloudinary.v2.uploader.upload(req.file.path)
     // TIPOS DE COLECCION 
 
     var tiposValidos = ['lineas', 'productos'] ;
