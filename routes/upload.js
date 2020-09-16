@@ -99,10 +99,8 @@ function subirPorTipo(tipo, id, nombreArchivo, res){
     if(tipo === 'lineas'){
 
         Linea.findById(id, (err, linea) => {
-
+                
             var  pathViejo = './uploads/lineas/'+ linea.img;
-           
-            console.log(cloudinary);
             
            
 
